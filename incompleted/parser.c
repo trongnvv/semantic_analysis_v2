@@ -378,30 +378,23 @@ void compileStatements(void) {
 }
 
 void compileStatement(void) {
-  printf("string %s: type : ",currentToken->string);
   switch (lookAhead->tokenType) {
   case TK_IDENT:
-  printf("TK_IDENT: %d\n",lookAhead->tokenType);
     compileAssignSt();
     break;
   case KW_CALL:
-  printf("KW_CALL: %d\n",lookAhead->tokenType);
     compileCallSt();
     break;
   case KW_BEGIN:
-  printf("KW_BEGIN: %d\n",lookAhead->tokenType);
     compileGroupSt();
     break;
   case KW_IF:
-  printf("KW_IF: %d\n",lookAhead->tokenType);
     compileIfSt();
     break;
   case KW_WHILE:
-  printf("KW_WHILE: %d\n",lookAhead->tokenType);
     compileWhileSt();
     break;
   case KW_FOR:
-  printf("KW_FOR: %d\n",lookAhead->tokenType);
     compileForSt();
     break;
     // EmptySt needs to check FOLLOW tokens
@@ -454,7 +447,6 @@ Type* compileLValue(void) {
   default: 
     error(ERR_INVALID_LVALUE,currentToken->lineNo, currentToken->colNo);
   }
-  printf("compileLValue: string %s : type %d\n",currentToken->string, varType->typeClass);
   return varType;
 }
 
@@ -467,7 +459,6 @@ void compileAssignSt(void) {
   eat(SB_ASSIGN);
 
   expType = compileExpression();
-  printf("checkTypeEquality:  %d : %d\n",varType->typeClass , expType->typeClass);
   checkTypeEquality(varType, expType);
 }
 
@@ -494,7 +485,6 @@ void compileIfSt(void) {
   eat(KW_THEN);
   compileStatement();
   if (lookAhead->tokenType == KW_ELSE) {
-    printf("compileElseSt: string %s : type %d\n",currentToken->string, lookAhead->tokenType);
     compileElseSt();
   }
     
@@ -520,10 +510,10 @@ void compileForSt(void) {
   eat(KW_FOR);
   
   varType = compileLValue();
-  eat(TK_IDENT);
+  // eat(TK_IDENT);
 
-  // check if the identifier is a variable
-  checkDeclaredVariable(currentToken->string);
+  // // check if the identifier is a variable
+  // checkDeclaredVariable(currentToken->string);
 
   eat(SB_ASSIGN);
   type = compileExpression();
@@ -658,7 +648,6 @@ Type* compileExpression(void) {
   default:
     type = compileExpression2();
   }
-  printf("compileExpression: string : %s ; type : %d\n",currentToken->string, type->typeClass);
   return type;
 }
 
